@@ -102,6 +102,10 @@ class EditorViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     //MARK: - Entities
     func selectedEntityDidChange()
     {
+        for view in optionContainers {
+            view.hidden = true
+        }
+        
         attributesTable.reloadData()
         relationshipsTable.reloadData()
         selectedAttribute = nil
@@ -112,6 +116,9 @@ class EditorViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         
         entityNameField.stringValue = selectedEntity.name
         entityParentClassField.stringValue = selectedEntity.superClassName
+        
+        let sView = entityOptionsContainer.superview
+        sView?.addSubview(entityOptionsContainer)
         entityOptionsContainer.hidden = false
         
     }
@@ -186,6 +193,12 @@ class EditorViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     func selectedRelationshipDidChange()
     {
         if selectedRelationship != nil{
+            for view in optionContainers {
+                view.hidden = true
+            }
+            
+            let sView = relationshipOptionsContainer.superview
+            sView?.addSubview(relationshipOptionsContainer)
             relationshipOptionsContainer.hidden = false
             //Fill option with the selected relationship data
             populateRelationshipUI()
@@ -290,7 +303,13 @@ class EditorViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     //MARK: - Attributes
     func selectedAttributeDidChange()
     {
+        for view in optionContainers {
+            view.hidden = true
+        }
+        
         if selectedAttribute != nil{
+            let sView = attributeOptionsContainer.superview
+            sView?.addSubview(attributeOptionsContainer)
             attributeOptionsContainer.hidden = false
             //Fill option with the selected attribute data
             populateAttributeUI()
@@ -506,6 +525,7 @@ class EditorViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         entities.append(entity)
         entitiesTable.reloadData()
         relationshipsTable.reloadData()
+        entitiesTable.scrollToEndOfDocument(nil)
     }
     
     
@@ -554,6 +574,7 @@ class EditorViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         
         selectedEntity.attributes.append(attribute)
         attributesTable.reloadData()
+        attributesTable.scrollToEndOfDocument(nil)
     }
     
     
@@ -591,6 +612,7 @@ class EditorViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         let relationship = RelationshipDescriptor(name:relationshipName)
         selectedEntity.relationships.append(relationship)
         relationshipsTable.reloadData()
+        relationshipsTable.scrollToEndOfDocument(nil)
     }
     
     
